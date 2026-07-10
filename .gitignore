@@ -399,3 +399,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Un-ignore this project's Express backend. The Visual Studio template's
+# "[Ee]xpress/" rule (above) targets InstallShield output, but it also matches
+# our API folder and would exclude the entire backend from the repo.
+!/express/
