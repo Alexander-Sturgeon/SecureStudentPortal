@@ -1,3 +1,14 @@
+/*
+COLORS & FONTS:
+
+PrimaryFont = font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+*/
+:root {
+  --primary-color: rgb(114, 1, 175);
+  --secondary-color: #ffffff;
+}
+
 *{
   box-sizing: border-box;
 }
