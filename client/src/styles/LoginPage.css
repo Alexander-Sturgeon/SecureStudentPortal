@@ -1,0 +1,66 @@
+.login-panel{
+    border: 3px solid black;
+    border-radius: .5rem;
+    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, .5);
+    min-height: 400px;
+    margin: 5rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+}
+
+/* LOGIN COMPONENT */
+.login-comp-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.login-comp-select{
+    all: unset;
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+    align-self: center;
+}
+.login-comp-heading{
+    color: var(--primary-color);
+    font-family: var(--heading-font);
+    align-self: center;
+}
+.login-comp-divider{
+    background-color: var(--primary-color);
+    border-radius: 5rem;
+    height: 2px;
+    width: 90%;
+    align-self: center;
+    margin-bottom: 2rem;
+}
+.login-comp-form, form{
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+.login-comp-field{
+    display: flex;
+    flex-direction: column;
+    gap:.5rem;
+    color: var(--primary-color);
+    font-family:var(--label-font);
+    font-size: 1.2rem;
+}
+.login-comp-field input{
+    font-size: 1rem;
+}
+.submit-button{
+    min-width: 10rem;
+    align-self: center;
+    margin-bottom: 1rem;
+    padding: .5rem;
+    font-size: 1rem;
+    background-color: green;
+    color: white;
+    border-radius: .5rem;
+}
+
+/* REGISTER COMPONENT */
