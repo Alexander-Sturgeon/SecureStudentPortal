@@ -1,0 +1,28 @@
+.nav-body{
+    background-color: rgb(114, 1, 175);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin: .2rem;
+    padding: 0rem .2rem;
+    border-radius: .2rem;
+}
+.nav-left{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+.nav-right{
+    display: flex;
+    gap: .5rem;
+}
+/* ALL BUTTONS ARE STRIPPED IN nav */
+button{
+    all: unset;
+}
+.nav-link{
+    color: white;
+    
+}
