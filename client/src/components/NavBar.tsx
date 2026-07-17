@@ -18,7 +18,7 @@ function Navbar(){
             </div>
             <div className="nav-right">
                 <p> | </p>
-                {isLoggedIn ? "User Name Here" : <button className="nav-buttons"><Link to='/login' className="nav-link" aria-label="Login Navigation">Login </Link></button>}
+                {isLoggedIn ? <div style={{display: 'flex',}}><p>Username Here</p><p>&nbsp;|&nbsp;</p><button className="nav-buttons" onClick={() => setIsLoggedIn(!isLoggedIn)}>Logout</button></div> : <button className="nav-buttons"><Link to='/login' className="nav-link" aria-label="Login Navigation">Login </Link></button>}
                 
             </div>
         </div>

@@ -1,12 +1,9 @@
-/*
-COLORS & FONTS:
-
-PrimaryFont = font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-
-*/
 :root {
   --primary-color: rgb(114, 1, 175);
   --secondary-color: #ffffff;
+
+  --heading-font: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  --label-font: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 *{
