@@ -1,6 +1,6 @@
 :root {
   --primary-color: rgb(114, 1, 175);
-  --secondary-color: #ffffff;
+  --secondary-color: rgb(198, 87, 18);
 
   --heading-font: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   --label-font: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -8,4 +8,7 @@
 
 *{
   box-sizing: border-box;
+}
+.auth-alert-message{
+  color:red;
 }

@@ -5,6 +5,7 @@ import '../src/App.css';
 import LoginPage from './pages/LoginPage';
 import Navbar from './components/NavBar';
 import Footer from './components/Footer';
+import ClassListPage from './pages/ClassListPage';
 function App() {
 
   return (
@@ -12,6 +13,7 @@ function App() {
     <Navbar/>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/classes" element={<ClassListPage/>}/>
         <Route path="*" element={<Navigate to='/' replace />} />
       </Routes>
       <Footer/>
