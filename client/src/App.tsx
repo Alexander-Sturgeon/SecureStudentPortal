@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import Navbar from './components/NavBar';
 import Footer from './components/Footer';
 import ClassListPage from './pages/ClassListPage';
+import ClassDetailPage from './pages/ClassDetailPage';
 function App() {
 
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/classes" element={<ClassListPage/>}/>
+        <Route path="/class/:id" element={<ClassDetailPage/>}/>
         <Route path="*" element={<Navigate to='/' replace />} />
       </Routes>
       <Footer/>

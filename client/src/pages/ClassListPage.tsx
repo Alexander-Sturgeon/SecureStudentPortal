@@ -31,9 +31,33 @@ export default function ClassListPage(){
                 </div>
                 <div className="classlist-classes">
                     {/* Map over both students and teachers classes */}
-                    <ClassCard/>
-                    <ClassCard/>
-                    <ClassCard/>
+                    <ClassCard
+                        Id={1}
+                        Term="Summer 2026"
+                        Code="ENGL201"
+                        Name="Modern Poetry"
+                        Professor="Alexander Sturgeon"
+                        AssignmentCount={3}
+                        LectureCount={8}
+                    />
+                    <ClassCard
+                        Id={2}
+                        Term="Summer 2026"
+                        Code="PROG2270"
+                        Name="Web Development"
+                        Professor="Jane Doe"
+                        AssignmentCount={5}
+                        LectureCount={0}
+                    />
+                    <ClassCard
+                        Id={3}
+                        Term="Summer 2026"
+                        Code="MATH150"
+                        Name="Discrete Mathematics"
+                        Professor="John Smith"
+                        AssignmentCount={0}
+                        LectureCount={10}
+                    />
                 </div>
             </div>:
             // This sends them back to login page with the message if they aren't logged it

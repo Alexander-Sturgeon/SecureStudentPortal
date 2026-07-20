@@ -33,6 +33,10 @@
     margin-top: 1rem;
 }
 /* CARD */
+.card-nav{
+    all: unset;
+    cursor: pointer;
+}
 .card-body{
     border: 2px solid black;
     box-shadow: 2px 2px 5px 5px rgba(0, 0, 0, .3);
