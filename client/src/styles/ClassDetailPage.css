@@ -1,0 +1,115 @@
+.detail-back-btn{
+     margin-left: 1rem;
+     margin-top: 1rem;
+}
+.detail-header{
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: .5rem;
+    border: 4px solid black;
+    box-shadow: 0px 0px 4px 5px rgba(0, 0, 0, .3);
+    text-align: center;
+}
+.detail-info{
+    display: flex;
+    gap: 2rem;
+    margin: 1rem;
+    justify-content: space-evenly;
+}
+.detail-lecture{
+    flex: 6;
+}
+.detail-assignment{
+    flex: 6;
+}
+/* ASSIGNMENTS */
+.assignment-header{
+    background-color: var(--secondary-color);
+    color: white;
+    padding: .25rem;
+    width: 50%;
+    font-family: var(--label-font);
+    margin-bottom: 0rem;
+    border: 2px solid black;
+}
+.assignment-list{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+    padding: .5rem;
+}
+.detail-item-header{
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    font-family: var(--heading-font);
+    margin-bottom: 0rem;
+}
+.as-single-date{
+    color: gray;
+}
+.assignment-single-lower{
+    display: flex;
+    justify-content: space-between;
+    margin: 0rem 1rem .5rem 1rem;
+    align-items: center;
+}
+.single-lower-status{
+    border: 2px solid black;
+    padding: .2rem .75rem;
+    border-radius: .2rem;
+}
+.single-lower-submit{
+    all: unset;
+    cursor: pointer;
+    border: 2px solid black;
+    border-radius: .2rem;
+    padding: .2rem .4rem;
+    height: fit-content;
+    background-color: rgba(25, 128, 25, 0.533);
+    color: white;
+}
+.assignment-divider{
+    border-top: 2px dotted rgba(0, 0, 0, .3);
+    height: 0px;
+    margin-bottom: .5rem;
+}
+/* LECTURES */
+.lecture-header{
+    background-color: var(--primary-color);
+    color: white;
+    padding: .25rem;
+    width: 50%;
+    font-family: var(--label-font);
+    margin-bottom: 0rem;
+    border: 2px solid black;
+}
+.lecture-list{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+    padding: .5rem;
+}
+.lecture-card{
+    all: unset;
+    cursor: pointer;
+    border: 2px dotted gray;
+    padding: .5rem;
+    
+}
+.detail-lecture-output{
+    margin: 1rem;
+    border: 2px solid black;
+    padding: 1rem;
+
+    background-color: rgba(193, 193, 193, 0.323);
+}
+.lecture-date{
+    color: var(--secondary-color);
+    font-family: var(--label-font);
+}
+.lecture-output-heading{
+    color: var(--primary-color);
+    font-family: var(--heading-font);
+}
