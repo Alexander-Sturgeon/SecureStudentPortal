@@ -9,6 +9,8 @@ export default function ClassListPage(){
     //This controls wether they can view this page
     const [isLoggedIn, setIsLoggedIn] = useState(true);
 
+    //Add a get based on user and if that user returns true setIsLoggedIn == true (is set true by default now just for testing)
+    
     const term = "Summer 2026";
 
     function HandleChange(){
