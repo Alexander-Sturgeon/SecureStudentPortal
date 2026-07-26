@@ -18,7 +18,7 @@ USE `studentportal` ;
 -- Table `studentportal`.`user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `studentportal`.`user` (
-  `user_id` INT NOT NULL,
+  `user_id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(250) NULL,
   `last_name` VARCHAR(250) NULL,
   `password_hash` VARCHAR(250) NULL,
@@ -64,7 +64,7 @@ ENGINE = InnoDB;
 -- Table `studentportal`.`class`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `studentportal`.`class` (
-  `class_id` INT NOT NULL,
+  `class_id` VARCHAR(250) NOT NULL,
   `name` VARCHAR(250) NULL,
   `teacher_teacher_id` INT NOT NULL,
   PRIMARY KEY (`class_id`),
@@ -83,7 +83,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `studentportal`.`assignment` (
   `assignment_id` INT NOT NULL,
   `due_date` DATE NULL,
-  `class_class_id` INT NOT NULL,
+  `class_class_id` VARCHAR(250) NOT NULL,
   `file` VARCHAR(250) NULL,
   PRIMARY KEY (`assignment_id`),
   INDEX `fk_assignment_class1_idx` (`class_class_id` ASC) VISIBLE,
@@ -100,7 +100,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `studentportal`.`student_has_class` (
   `student_student_id` INT NOT NULL,
-  `class_class_id` INT NOT NULL,
+  `class_class_id` VARCHAR(250) NOT NULL,
   PRIMARY KEY (`student_student_id`, `class_class_id`),
   INDEX `fk_student_has_class_class1_idx` (`class_class_id` ASC) VISIBLE,
   INDEX `fk_student_has_class_student1_idx` (`student_student_id` ASC) VISIBLE,
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `studentportal`.`lecture` (
   `date` DATE NULL,
   `duration_hours` INT NULL,
   `content` VARCHAR(250) NULL,
-  `class_class_id` INT NOT NULL,
+  `class_class_id` VARCHAR(250) NOT NULL,
   PRIMARY KEY (`lecture_id`),
   INDEX `fk_lecture_class1_idx` (`class_class_id` ASC) VISIBLE,
   CONSTRAINT `fk_lecture_class1`
@@ -167,7 +167,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `studentportal`.`Failure Logs` (
   `log_id` INT NOT NULL,
   `action` VARCHAR(255) NULL,
-  `timestamp` TIMESTAMP(50) NULL,
+  `timestamp` TIMESTAMP(6) NULL,
   `ip_address` VARCHAR(255) NULL,
   `user_user_id` INT NOT NULL,
   PRIMARY KEY (`log_id`),

@@ -10,7 +10,7 @@ const PORT = Number(process.env.PORT) || 3000;
 //touch ~/express/.env
 
 // Import route files here
-// import auth from "./routes/auth";
+import auth from "./routes/auth";
 
 //cors allows requests from other origins
 //express.json parses json request bodies so req.body works.
@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 });
 
 // Mount route files here
-// app.use("/auth", auth);
+app.use("/api/auth", auth);
 
 // starts server
 app.listen(PORT, () => {
