@@ -1,5 +1,5 @@
 .nav-body{
-    background-color: rgb(114, 1, 175);
+    background-color: var(--primary-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -19,8 +19,9 @@
     gap: .5rem;
 }
 /* ALL BUTTONS ARE STRIPPED IN nav */
-button{
+.nav-buttons{
     all: unset;
+    cursor: pointer;
 }
 .nav-link{
     color: white;
