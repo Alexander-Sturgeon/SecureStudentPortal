@@ -1,8 +1,8 @@
 INSERT INTO user(user_id, first_name, last_name, password_hash, email)
-VALUES (NULL, "Kenneth", "Barclay", "39fjiejfew9", "kdb@conestoga.com"),
-       (NULL, "Alex", "Sturgeon", "828u310294i", "as@conestoga.com"),
-       (NULL, "Gurkirat", "Singh", "28u12uf9ejfa9efj", "gs@conestoga.com"),
-       (NULL, "no rush", "no worries", "absolutelynorushguys", "nonw@conestoga.com");
+VALUES (NULL, "Kenneth", "Barclay", "$2b$10$3M5LzNdCWTLAf31iQKndHOQukvHJU4dCSVsxNbWmHlcjPfpBB3CEW", "kdb@conestoga.com"),
+       (NULL, "Alex", "Sturgeon", "$2b$10$u3y0hKbLgef/zPPkhDTdluMSqKp5yYmXpSytLPr9zY/0t0Fs/Bl06", "as@conestoga.com"),
+       (NULL, "Gurkirat", "Singh", "$2b$10$CPpVnkHxQjKuxC5Pl40vD.g1QNBp1g49LGW7WtDgWqMo2xYOJ3TcK", "gs@conestoga.com"),
+       (NULL, "no rush", "no worries", "$2b$10$r9pXKesLjqoSi.73bNpxM..CM1faGpnYdm9OIlG914GifwCdweZ.e", "nonw@conestoga.com");
 
 INSERT INTO student(student_id, User_user_id)
 VALUES (123456, 1),
