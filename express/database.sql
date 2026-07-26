@@ -18,7 +18,7 @@ USE `studentportal` ;
 -- Table `studentportal`.`user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `studentportal`.`user` (
-  `user_id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
   `first_name` VARCHAR(250) NULL,
   `last_name` VARCHAR(250) NULL,
   `password_hash` VARCHAR(250) NULL,
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `studentportal`.`student` (
   INDEX `fk_student_User1_idx` (`User_user_id` ASC) VISIBLE,
   CONSTRAINT `fk_student_User1`
     FOREIGN KEY (`User_user_id`)
-    REFERENCES `mydb`.`user` (`user_id`)
+    REFERENCES `studentportal`.`user` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -64,7 +64,7 @@ ENGINE = InnoDB;
 -- Table `studentportal`.`class`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `studentportal`.`class` (
-  `class_id` VARCHAR(250) NOT NULL,
+  `class_id` INT NOT NULL,
   `name` VARCHAR(250) NULL,
   `teacher_teacher_id` INT NOT NULL,
   PRIMARY KEY (`class_id`),
@@ -83,7 +83,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `studentportal`.`assignment` (
   `assignment_id` INT NOT NULL,
   `due_date` DATE NULL,
-  `class_class_id` VARCHAR(250) NOT NULL,
+  `class_class_id` INT NOT NULL,
   `file` VARCHAR(250) NULL,
   PRIMARY KEY (`assignment_id`),
   INDEX `fk_assignment_class1_idx` (`class_class_id` ASC) VISIBLE,
@@ -100,7 +100,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `studentportal`.`student_has_class` (
   `student_student_id` INT NOT NULL,
-  `class_class_id` VARCHAR(250) NOT NULL,
+  `class_class_id` INT NOT NULL,
   PRIMARY KEY (`student_student_id`, `class_class_id`),
   INDEX `fk_student_has_class_class1_idx` (`class_class_id` ASC) VISIBLE,
   INDEX `fk_student_has_class_student1_idx` (`student_student_id` ASC) VISIBLE,
@@ -125,6 +125,7 @@ CREATE TABLE IF NOT EXISTS `studentportal`.`student_has_assignment` (
   `assignment_assignment_id` INT NOT NULL,
   `file_path` VARCHAR(250) NULL,
   `notes` VARCHAR(250) NULL,
+  `grade` DECIMAL(4,2) NULL,
   PRIMARY KEY (`student_student_id`, `assignment_assignment_id`),
   INDEX `fk_student_has_assignment_assignment1_idx` (`assignment_assignment_id` ASC) VISIBLE,
   INDEX `fk_student_has_assignment_student1_idx` (`student_student_id` ASC) VISIBLE,
@@ -149,12 +150,31 @@ CREATE TABLE IF NOT EXISTS `studentportal`.`lecture` (
   `date` DATE NULL,
   `duration_hours` INT NULL,
   `content` VARCHAR(250) NULL,
-  `class_class_id` VARCHAR(250) NOT NULL,
+  `class_class_id` INT NOT NULL,
   PRIMARY KEY (`lecture_id`),
   INDEX `fk_lecture_class1_idx` (`class_class_id` ASC) VISIBLE,
   CONSTRAINT `fk_lecture_class1`
     FOREIGN KEY (`class_class_id`)
     REFERENCES `studentportal`.`class` (`class_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `studentportal`.`Failure Logs`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `studentportal`.`Failure Logs` (
+  `log_id` INT NOT NULL,
+  `action` VARCHAR(255) NULL,
+  `timestamp` TIMESTAMP(50) NULL,
+  `ip_address` VARCHAR(255) NULL,
+  `user_user_id` INT NOT NULL,
+  PRIMARY KEY (`log_id`),
+  INDEX `fk_Failure Logs_user1_idx` (`user_user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Failure Logs_user1`
+    FOREIGN KEY (`user_user_id`)
+    REFERENCES `studentportal`.`user` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
