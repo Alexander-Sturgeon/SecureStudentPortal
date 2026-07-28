@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `studentportal`.`user` (
   `last_name` VARCHAR(250) NULL,
   `password_hash` VARCHAR(250) NULL,
   `email` VARCHAR(250) NULL,
+  `is_admin` BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
 ENGINE = InnoDB;
