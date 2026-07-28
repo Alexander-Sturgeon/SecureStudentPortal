@@ -1,3 +1,8 @@
+.detail-body{
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+}
 .detail-back-btn{
      margin-left: 1rem;
      margin-top: 1rem;
@@ -23,6 +28,18 @@
 }
 .detail-assignment{
     flex: 6;
+}
+.detail-add-student{
+    justify-self: center;
+}
+.detail-add-student-btn{
+    padding: .5rem 10rem;
+    background-color: var(--secondary-color);
+    border-radius: .5rem;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0px 0px 4px 5px rgba(0, 0, 0, .3);
+    cursor: pointer;
 }
 /* ASSIGNMENTS */
 .assignment-header{
@@ -112,4 +129,84 @@
 .lecture-output-heading{
     color: var(--primary-color);
     font-family: var(--heading-font);
+}
+/*Modals for Add Lecture/Add Assignment */
+.add-lecture-popup-btn{
+    margin-top: .5rem;
+    padding: .3rem;
+    border-radius: .5rem;
+    cursor: pointer;
+    color: white;
+    background-color: var(--secondary-color);
+}
+.add-assignment-popup-btn{
+    color: white;
+    padding: .3rem;
+    border-radius: .5rem;
+    cursor: pointer;
+    background-color: var(--primary-color);
+}
+/*Backdrop covers the viewport and centers the panel inside it*/
+.modal-overlay{
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, .5);
+}
+.modal-body{
+    border: 2px solid black;
+    border-radius: .5rem;
+    box-shadow: 0px 0px 4px 5px rgba(0, 0, 0, .3);
+    background-color: white;
+    padding: 1rem;
+    width: 90%;
+    max-width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+.modal-close{
+    all: unset;
+    cursor: pointer;
+    border: 2px solid black;
+    border-radius: .2rem;
+    padding: .2rem .4rem;
+    background-color: var(--secondary-color);
+    color: white;
+}
+.modal-form{
+    margin-bottom: 1rem;
+    padding: 1rem;
+    gap: 1.5rem;
+}
+.modal-heading{
+    font-size: 1.2rem
+}
+.modal-submit{
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, .3);
+    color: white;
+
+}
+/* Tablets and up */
+@media (min-width: 481px) {
+  body { font-size: 16px; }
+}
+
+/* Laptops and up */
+@media (min-width: 769px) {
+  body { font-size: 18px; }
+  .modal-body{min-width: 600px; min-height: 400px;}
+}
+
+/* Large desktops and up */
+@media (min-width: 1025px) {
+  body { font-size: 20px; }
+  .modal-body{min-width: 600px; min-height: 400px;}
 }
