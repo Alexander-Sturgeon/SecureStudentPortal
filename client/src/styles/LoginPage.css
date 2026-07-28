@@ -1,13 +1,17 @@
+.login-body{
+    border: 2px solid black;
+}
 .login-panel{
     border: 3px solid black;
     border-radius: .5rem;
     box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, .5);
     min-height: 400px;
+    min-width: 400px;
     margin: 5rem;
     padding: 1rem;
     display: flex;
     flex-direction: column;
-
+    justify-self: center;
 }
 
 /* LOGIN COMPONENT */
@@ -64,3 +68,20 @@
 }
 
 /* REGISTER COMPONENT */
+
+
+/* Tablets and up */
+@media (min-width: 481px) {
+  body { font-size: 16px; }
+}
+
+/* Laptops and up */
+@media (min-width: 769px) {
+  body { font-size: 18px; }
+  .login-panel{max-width: 80%;}
+}
+
+/* Large desktops and up */
+@media (min-width: 1025px) {
+  body { font-size: 20px; }
+}
