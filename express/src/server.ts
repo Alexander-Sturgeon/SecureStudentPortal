@@ -13,9 +13,7 @@ const PORT = Number(process.env.PORT) || 3000;
 // Import route files here
 import auth from "./routes/auth";
 import classes from "./routes/classes";
-//The session cookie is sent automatically by the browser, so cors must name
-//one exact origin. A wildcard origin with credentials would let any site make
-//authenticated requests on a logged in user's behalf.
+//The session cookie is sent automatically by the browser
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN ?? "http://localhost:5173";
 
 app.use(cors({

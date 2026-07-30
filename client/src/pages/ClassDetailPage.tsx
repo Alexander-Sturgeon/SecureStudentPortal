@@ -1,6 +1,9 @@
 import { Link, useParams, Navigate } from "react-router-dom"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import '../styles/ClassDetailPage.css';
+
+import { GetClassDetail } from "../services/classes";
+import type { ClassDetail } from "../services/classes";
 
 import AddLectureComp from "../components/AddLectureComp";
 import AddAssignmentComp from "../components/AddAssignmentComp";
@@ -15,12 +18,15 @@ interface Lecture {
       Content: string;    
   }
 export default function ClassDetailPage(){
-    //This is passing the id of the class but for UI rough in just hardcoding values
+    //The class id from the url, used to ask the api for this class
     const {id} = useParams();
-    //This controls wether they can view this page
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
-    //Controller for if they are a student or a proffessor
-    const [isAdmin, setIsAdmin] = useState(true);
+    const [classDetail, setClassDetail] = useState<ClassDetail | null>(null);
+    const [status, setStatus] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    //The server decides whether this user may edit, the client just renders it
+    const canEdit = classDetail?.can_edit ?? false;
+
     const [isAddLectureComp, setIsAddLectureComp] = useState(false);
     const [isAddAssignmentComp, setIsAddAssignmentComp] = useState(false);
     const [isAddStudentComp, setIsAddStudentComp] = useState(false);
@@ -30,6 +36,19 @@ export default function ClassDetailPage(){
         setLectureToggle(true)
         setLectureOutput(lecture)
     }
+    useEffect(() => {
+        if(!id){ return; }
+
+        //The api only answers for a class this user is enrolled in or teaches
+        GetClassDetail(id)
+            .then(result => {
+                setStatus(result.status);
+                setClassDetail(result.data);
+            })
+            .catch(() => setStatus(0))
+            .finally(() => setLoading(false));
+    }, [id]);
+
     function StatusColor(status : number){
         switch(status){
             case 1: return 'yellow';
@@ -41,18 +60,37 @@ export default function ClassDetailPage(){
     }
     
     
+    if(loading){
+        return(
+            <section className="detail-body"><p>Loading ...</p></section>
+        )
+    }
+
+    //401 means there is no valid session, send them back to the login page
+    if(status === 401){
+        return <Navigate to={"/"} state={{message: 'Must be logged in.'}}/>
+    }
+
+    //The api returns 404 for a class that does not exist and for one this
+    //user has no access to, so both land here on purpose
+    if(!classDetail){
+        return(
+            <section className="detail-body"><p>Class not found.</p></section>
+        )
+    }
+
     return(
         <section className="detail-body">
-            {isLoggedIn ? 
                 <div>
                     <div className="detail-back-btn"><Link to={`/classes`} className="assignment-nav" aria-label='Navigate to Class List'>{'<<'} Back to My Classes</Link></div>
                     <div className="detail-header">
+                        {/* term is not in the database schema yet */}
                         <p>Fall 2026</p>
-                        <h1>ENGL 201 - Modern Poetry</h1>
-                        <p>Alexander Sturgeon</p>
+                        <h1>{classDetail.class_id} - {classDetail.name}</h1>
+                        <p>{classDetail.teacher_name}</p>
                     </div>
                     <div className="detail-add-student">
-                        {isAdmin &&
+                        {canEdit &&
                             <button className="detail-add-student-btn" onClick={() => setIsAddStudentComp(!isAddStudentComp)}>Add Student</button>
                         }
                     </div>
@@ -70,7 +108,7 @@ export default function ClassDetailPage(){
                                     </div>
                                     <div className="assignment-divider"></div>
                                 </div>
-                                {isAdmin &&
+                                {canEdit &&
                                     <div className="assignment-create">
                                         <button className="add-assignment-popup-btn" onClick={() => setIsAddAssignmentComp(!isAddAssignmentComp)}>Add Assignment</button>
                                     </div>
@@ -95,7 +133,7 @@ export default function ClassDetailPage(){
                                         <p className="lecture-subject">Subject of this lecture</p>
                                     </div>
                                 </button>
-                                {isAdmin && 
+                                {canEdit && 
                                     <div className="lecture-create">
                                         <button className="add-lecture-popup-btn" onClick={() => setIsAddLectureComp(!isAddLectureComp)}>Add Lecture</button>
                                     </div>
@@ -116,10 +154,6 @@ export default function ClassDetailPage(){
                     {isAddAssignmentComp && <AddAssignmentComp onClose={() => setIsAddAssignmentComp(false)}/>}
                     {isAddStudentComp && <AddStudentComp onClose={() => setIsAddStudentComp(false)}/>}
                 </div>
-                :
-                // This sends them back to login page with the message if they aren't logged it
-                <Navigate to={"/"} state={{message: 'Must be logged in.'}}/>
-            }
         </section>
     )
 }

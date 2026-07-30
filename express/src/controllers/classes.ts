@@ -6,7 +6,7 @@ export const getClassDetail = async function(req: AuthRequest, res: Response){
     //Identity comes from the verified token, never from the request itself
     const studentId = req.user?.student_id ?? null;
     const teacherId = req.user?.teacher_id ?? null;
-    // Express 5 types params as string | string[], so narrow before using it
+
     const classId = typeof req.params.classId === "string" ? req.params.classId : null;
 
     if(!classId){
