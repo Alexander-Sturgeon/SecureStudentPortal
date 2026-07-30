@@ -15,8 +15,8 @@ export interface AuthRequest extends Request{
 
 //Test their Auth
 export const requireAuth = function(req:AuthRequest, res:Response, next: NextFunction){
-    const header = req.headers.authorization;
-    const token = header?.startsWith("Bearer ") ? header.slice(7) : null;
+    //Read the session from the HttpOnly cookie set at login
+    const token = req.cookies?.token ?? null;
 
     if(!token){
         res.status(401).json({success: false, message:"Invalid Authentication"});

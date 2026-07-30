@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -11,23 +12,28 @@ const PORT = Number(process.env.PORT) || 3000;
 
 // Import route files here
 import auth from "./routes/auth";
-import { requireAuth, AuthRequest } from "./middleware/auth";
-//cors allows requests from other origins
+import classes from "./routes/classes";
+//The session cookie is sent automatically by the browser, so cors must name
+//one exact origin. A wildcard origin with credentials would let any site make
+//authenticated requests on a logged in user's behalf.
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN ?? "http://localhost:5173";
+
+app.use(cors({
+    origin: CLIENT_ORIGIN,
+    credentials: true
+}));
 //express.json parses json request bodies so req.body works.
-app.use(cors());
 app.use(express.json());
+//cookieParser fills req.cookies so requireAuth can read the session
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
     res.send("Secure Student Portal API");
 });
 
-//--Test Auth Block--
-app.get("api/test-auth", (req:AuthRequest, res) => res.json({user: req.user}));
-//auth
-app.get("/api/test-auth", requireAuth, (req: AuthRequest,res) => res.json({user:req.user}));
 // Mount route files here
 app.use("/api/auth", auth);
-//--Test Auth Block
+app.use("/api/classes", classes);
 
 // starts server
 app.listen(PORT, () => {

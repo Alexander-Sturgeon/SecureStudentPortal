@@ -40,7 +40,18 @@ export const login = async function(req: Request, res: Response){
             {expiresIn: "1hr"}
         );
 
-        res.status(200).json({success: true, token})
+        //The token goes in an HttpOnly cookie so page scripts cannot read it,
+        //which keeps an XSS payload from stealing the session.
+        //secure is off in development because localhost is served over http.
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 60 * 60 * 1000
+        });
+
+        //The token is deliberately not in the body, the cookie is the only copy
+        res.status(200).json({success: true})
     }catch(error){
         console.log("You have encountered an error: ", error)
         res.status(500).json({success: false, message: "Server error."});
