@@ -24,8 +24,6 @@ export const getClassDetail = async function(req: AuthRequest, res: Response){
     try{
         const detail = await findClassForUser(classId, studentId, teacherId);
 
-        //Null means either no such class or no access. Same answer for both,
-        //so this endpoint can't be used to find out which classes exist.
         if(!detail){
             res.status(404).json({success: false, message: "Class not found."});
             return;
