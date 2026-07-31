@@ -31,3 +31,31 @@ export const findClassForUser = async(classId: string, studentId: number | null,
     `, [teacherId, studentId, classId, teacherId]);
     return rows[0] ?? null;
 }
+
+export interface AssignmentRow extends RowDataPacket{
+    assignment_id: number;
+    due_date: Date;
+    file_path: string | null;
+    grade: string | null;
+}
+
+//Access to the class itself must already have been proven with
+//findClassForUser before this runs, so this query does not re-check it.
+//The submission join is still scoped to one student, which is what stops a
+//student from seeing another student's file or grade.
+export const findAssignmentsForClass = async(classId: string, studentId: number | null) => {
+    const [rows] = await pool.query<AssignmentRow[]>(`
+        SELECT
+            a.assignment_id,
+            a.due_date,
+            sha.file_path,
+            sha.grade
+        FROM assignment a
+        LEFT JOIN student_has_assignment sha
+            ON sha.assignment_assignment_id = a.assignment_id
+           AND sha.student_student_id <=> ?
+        WHERE a.class_class_id = ?
+        ORDER BY a.due_date
+    `, [studentId, classId]);
+    return rows;
+}

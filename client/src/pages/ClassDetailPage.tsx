@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import '../styles/ClassDetailPage.css';
 
 import { GetClassDetail } from "../services/classes";
-import type { ClassDetail } from "../services/classes";
+import type { ClassDetail, Assignment } from "../services/classes";
+import { SubmitAssignment } from "../services/submissions";
 
 import AddLectureComp from "../components/AddLectureComp";
 import AddAssignmentComp from "../components/AddAssignmentComp";
@@ -18,13 +19,13 @@ interface Lecture {
       Content: string;    
   }
 export default function ClassDetailPage(){
-    //The class id from the url, used to ask the api for this class
     const {id} = useParams();
     const [classDetail, setClassDetail] = useState<ClassDetail | null>(null);
+    const [assignments, setAssignments] = useState<Assignment[]>([]);
     const [status, setStatus] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [uploadMessage, setUploadMessage] = useState("");
 
-    //The server decides whether this user may edit, the client just renders it
     const canEdit = classDetail?.can_edit ?? false;
 
     const [isAddLectureComp, setIsAddLectureComp] = useState(false);
@@ -36,28 +37,50 @@ export default function ClassDetailPage(){
         setLectureToggle(true)
         setLectureOutput(lecture)
     }
-    useEffect(() => {
-        if(!id){ return; }
-
+    const LoadClass = (classId : string) => {
         //The api only answers for a class this user is enrolled in or teaches
-        GetClassDetail(id)
+        return GetClassDetail(classId)
             .then(result => {
                 setStatus(result.status);
                 setClassDetail(result.data);
+                setAssignments(result.assignments);
             })
             .catch(() => setStatus(0))
             .finally(() => setLoading(false));
+    }
+
+    useEffect(() => {
+        if(!id){ return; }
+        LoadClass(id);
     }, [id]);
 
-    function StatusColor(status : number){
-        switch(status){
-            case 1: return 'yellow';
-            case 2: return 'red';
-            case 3: return 'gray';
-            default: return 'blue';
+    const HandIn = async (event : React.FormEvent<HTMLFormElement>, assignmentId : number) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+
+        setUploadMessage("Uploading ...");
+        const result = await SubmitAssignment(assignmentId, new FormData(form));
+        setUploadMessage(result.message);
+
+        //Reload so the status badge reflects what the server actually stored
+        if(result.status === 201){
+            form.reset();
+            if(id){ LoadClass(id); }
         }
-        
     }
+
+    //Color assignment for the status
+    function StatusColor(status : string){
+        switch(status){
+            case 'LATE': return 'red';
+            case 'GRADED': return 'gray';
+            case 'SUBMITTED': return 'green';
+            default: return 'yellow';
+        }
+
+    }
+
+    const FormatDate = (value : string) => new Date(value).toLocaleDateString();
     
     
     if(loading){
@@ -84,7 +107,7 @@ export default function ClassDetailPage(){
                 <div>
                     <div className="detail-back-btn"><Link to={`/classes`} className="assignment-nav" aria-label='Navigate to Class List'>{'<<'} Back to My Classes</Link></div>
                     <div className="detail-header">
-                        {/* term is not in the database schema yet */}
+                        {/*Hardcoded as term isn't in the db scheema*/}
                         <p>Fall 2026</p>
                         <h1>{classDetail.class_id} - {classDetail.name}</h1>
                         <p>{classDetail.teacher_name}</p>
@@ -98,16 +121,26 @@ export default function ClassDetailPage(){
                         <div className="detail-assignment">
                             <h3 className="assignment-header">Assignments</h3>
                             <div className="assignment-list">
-                                {/* MAP OVER LECTURES AND MAKE ONE OF THESE DIVS FOR EACH */}
-                                <div className="assignment-single">
-                                    <h4 className="detail-item-header">Essay 2 - Close Reading of Dickinson</h4>
-                                    <p className="as-single-date">Due Sep 26, 11:59pm</p>
-                                    <div className="assignment-single-lower">
-                                        <p className="single-lower-status" style={{backgroundColor: StatusColor(1)}}>DUE</p>
-                                        <button className="single-lower-submit">Hand In</button>
+                                {assignments.length === 0 && <p className="assignment-empty">No assignments yet.</p>}
+                                {assignments.map(assignment =>
+                                    <div className="assignment-single" key={assignment.assignment_id}>
+                                        {/*the assignment table has no title column yet*/}
+                                        <h4 className="detail-item-header">Assignment {assignment.assignment_id}</h4>
+                                        <p className="as-single-date">Due {FormatDate(assignment.due_date)}</p>
+                                        <div className="assignment-single-lower">
+                                            <p className="single-lower-status" style={{backgroundColor: StatusColor(assignment.status)}}>{assignment.status}</p>
+                                            {assignment.can_submit &&
+                                                <form className="single-lower-form" onSubmit={(event) => HandIn(event, assignment.assignment_id)}>
+                                                    <input type="file" name="file" accept=".pdf,.doc,.docx" required/>
+                                                    <button type="submit" className="single-lower-submit">Hand In</button>
+                                                </form>
+                                            }
+                                        </div>
+                                        {assignment.grade !== null && <p className="single-lower-grade">Grade: {assignment.grade}</p>}
+                                        <div className="assignment-divider"></div>
                                     </div>
-                                    <div className="assignment-divider"></div>
-                                </div>
+                                )}
+                                {uploadMessage && <p className="assignment-upload-message">{uploadMessage}</p>}
                                 {canEdit &&
                                     <div className="assignment-create">
                                         <button className="add-assignment-popup-btn" onClick={() => setIsAddAssignmentComp(!isAddAssignmentComp)}>Add Assignment</button>

@@ -13,6 +13,7 @@ const PORT = Number(process.env.PORT) || 3000;
 // Import route files here
 import auth from "./routes/auth";
 import classes from "./routes/classes";
+import submissions from "./routes/submissions";
 //The session cookie is sent automatically by the browser
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN ?? "http://localhost:5173";
 
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
 // Mount route files here
 app.use("/api/auth", auth);
 app.use("/api/classes", classes);
+app.use("/api/assignments", submissions);
 
 // starts server
 app.listen(PORT, () => {

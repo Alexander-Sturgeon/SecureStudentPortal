@@ -10,3 +10,6 @@ dist
 .env
 .env.local
 *.local
+
+# Student submissions, never committed
+uploads/

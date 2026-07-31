@@ -1,6 +1,13 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
-import { findClassForUser } from '../models/classes';
+import { findClassForUser, findAssignmentsForClass } from '../models/classes';
+
+//A due date counts until the end of that day
+const EndOfDay = function(date: Date){
+    const due = new Date(date);
+    due.setHours(23, 59, 59, 999);
+    return due;
+}
 
 export const getClassDetail = async function(req: AuthRequest, res: Response){
     //Identity comes from the verified token, never from the request itself
@@ -24,6 +31,30 @@ export const getClassDetail = async function(req: AuthRequest, res: Response){
             return;
         }
 
+        const rows = await findAssignmentsForClass(classId, studentId);
+        const now = new Date();
+
+        //Status and can_submit are worked out here rather than in the browser,
+        //so a wrong clock on the client cannot change a deadline.
+        const assignments = rows.map(row => {
+            const due = EndOfDay(row.due_date);
+            const isLate = due < now;
+
+            let status = "DUE";
+            if(row.grade !== null){ status = "GRADED"; }
+            else if(row.file_path !== null){ status = "SUBMITTED"; }
+            else if(isLate){ status = "LATE"; }
+
+            return {
+                assignment_id: row.assignment_id,
+                due_date: row.due_date,
+                status,
+                grade: row.grade,
+                //Only a student can hand work in, and only before the deadline
+                can_submit: studentId !== null && !isLate
+            };
+        });
+
         res.status(200).json({
             success: true,
             class: {
@@ -31,7 +62,8 @@ export const getClassDetail = async function(req: AuthRequest, res: Response){
                 name: detail.name,
                 teacher_name: `${detail.first_name} ${detail.last_name}`,
                 can_edit: detail.can_edit === 1
-            }
+            },
+            assignments
         });
     }catch(error){
         console.log("You have encountered an error: ", error);
