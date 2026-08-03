@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import {requireAuth, requireTeacher} from '../middleware/auth';
-import {getClassDetail} from '../controllers/classes';
+import {getClassDetail, getClasses} from '../controllers/classes';
 import {addLecture} from '../controllers/lectures';
 
 const router = Router();

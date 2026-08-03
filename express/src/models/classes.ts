@@ -59,7 +59,7 @@ export const findClassesForUser = async(studentId: number | null, teacherId: num
             ON shc.class_class_id = c.class_id
            AND shc.student_student_id <=> ?
         WHERE shc.student_student_id IS NOT NULL OR c.teacher_teacher_id <=> ?
-    `, [studentId, studentId, teacherId]);
+    `, [studentId, teacherId]);
     return rows;
 }
 
