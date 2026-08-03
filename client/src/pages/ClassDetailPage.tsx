@@ -183,7 +183,7 @@ export default function ClassDetailPage(){
                             <p className="lecture-output">{lectureOutput?.Content}</p>
                         </div>
                     }
-                    {isAddLectureComp && <AddLectureComp onClose={() => setIsAddLectureComp(false)}/>}
+                    {isAddLectureComp && <AddLectureComp classId={id ?? ""} onClose={() => setIsAddLectureComp(false)}/>}
                     {isAddAssignmentComp && <AddAssignmentComp onClose={() => setIsAddAssignmentComp(false)}/>}
                     {isAddStudentComp && <AddStudentComp onClose={() => setIsAddStudentComp(false)}/>}
                 </div>
