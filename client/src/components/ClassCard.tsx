@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import '../styles/ClassListPage.css'
 
 interface ClassCardProps {
-    Id: number;
+    Id: string;
     Term: string;
     Code: string;
     Name: string;

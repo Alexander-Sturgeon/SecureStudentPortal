@@ -1,12 +1,34 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
-import { findClassForUser, findAssignmentsForClass } from '../models/classes';
+import { findClassForUser, findAssignmentsForClass, findClassesForUser } from '../models/classes';
 
 //A due date counts until the end of that day
 const EndOfDay = function(date: Date){
     const due = new Date(date);
     due.setHours(23, 59, 59, 999);
     return due;
+}
+
+export const getClasses = async function(req: AuthRequest, res: Response){
+    const studentId = req.user?.student_id ?? null;
+    const teacherId = req.user?.teacher_id ?? null;
+
+    try{
+        const rows = await findClassesForUser(studentId, teacherId);
+
+        const classes = rows.map(row => ({
+            class_id: row.class_id,
+            name: row.name,
+            teacher_name: `${row.first_name} ${row.last_name}`,
+            assignment_count: row.assignment_count,
+            lecture_count: row.lecture_count
+        }));
+
+        res.status(200).json({ success: true, classes });
+    }catch(error){
+        console.log("You have encountered an error: ", error);
+        res.status(500).json({success: false, message: "Server error."});
+    }
 }
 
 export const getClassDetail = async function(req: AuthRequest, res: Response){

@@ -32,6 +32,37 @@ export const findClassForUser = async(classId: string, studentId: number | null,
     return rows[0] ?? null;
 }
 
+export interface ClassListRow extends RowDataPacket{
+    class_id: string;
+    name: string;
+    first_name: string;
+    last_name: string;
+    assignment_count: number;
+    lecture_count: number;
+}
+
+//Returns every class the caller is enrolled in (student) or teaches (teacher).
+//Same null-safe pattern as findClassForUser - whichever id is null is ignored.
+export const findClassesForUser = async(studentId: number | null, teacherId: number | null) => {
+    const [rows] = await pool.query<ClassListRow[]>(`
+        SELECT
+            c.class_id,
+            c.name,
+            u.first_name,
+            u.last_name,
+            (SELECT COUNT(*) FROM assignment a WHERE a.class_class_id = c.class_id) AS assignment_count,
+            (SELECT COUNT(*) FROM lecture l WHERE l.class_class_id = c.class_id) AS lecture_count
+        FROM class c
+        JOIN teacher t ON t.teacher_id = c.teacher_teacher_id
+        JOIN user u ON u.user_id = t.User_user_id
+        LEFT JOIN student_has_class shc
+            ON shc.class_class_id = c.class_id
+           AND shc.student_student_id <=> ?
+        WHERE shc.student_student_id IS NOT NULL OR c.teacher_teacher_id <=> ?
+    `, [studentId, studentId, teacherId]);
+    return rows;
+}
+
 export interface AssignmentRow extends RowDataPacket{
     assignment_id: number;
     due_date: Date;

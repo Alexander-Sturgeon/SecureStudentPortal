@@ -23,6 +23,27 @@ export interface ClassDetailResult {
     assignments: Assignment[];
 }
 
+export interface ClassListItem {
+    class_id: string;
+    name: string;
+    teacher_name: string;
+    assignment_count: number;
+    lecture_count: number;
+}
+
+export const GetClasses = async (): Promise<ClassListItem[]> => {
+    const response = await fetch(`${API_URL}/api/classes`, {
+        credentials: "include"
+    });
+
+    if(!response.ok){
+        return [];
+    }
+
+    const body = await response.json();
+    return body.classes ?? [];
+}
+
 export const GetClassDetail = async (classId: string): Promise<ClassDetailResult> => {
     // credentials include sends the HttpOnly session cookie. The token is not
     // readable from javascript, so there is no header to build here.
