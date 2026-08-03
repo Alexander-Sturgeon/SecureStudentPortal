@@ -1,4 +1,5 @@
 import rateLimit from "express-rate-limit";
+import {writeLog, LogEvent, Severity} from '../models/logs';
 
 //protects server from brute force cyber attacks. Login limiter events should be logged. 
 export const loginLimiter = rateLimit({
@@ -10,8 +11,10 @@ export const loginLimiter = rateLimit({
     skipSuccessfulRequests: true,
     standardHeaders: true,
     legacyHeaders: false, 
-    message: {
-        success: false, 
-        message: "Too many login attempts. Please try again later."
+
+    //this is the only section where a brute force attempt would be visible. 
+    handler: async(req,res) => {
+        await writeLog(`${LogEvent.RATE_LIMIT_EXCEEDED} login`, Severity.CRITICAL, "FAILURE", req.ip ?? null, null);
+        res.status(429).json({success: false, message: "Too many login attempts. Please try again later."})
     }
 });

@@ -55,7 +55,7 @@ export const submitAssignment = async function(req: AuthRequest, res: Response){
         res.status(201).json({success: true, message: "Submission received."});
     }catch(error){
         RemoveUpload(req.file.path);
-        console.log("You have encountered an error: ", error);
+        console.error("You have encountered an error: ", error);
         res.status(500).json({success: false, message: "Server error."});
         return;
     }

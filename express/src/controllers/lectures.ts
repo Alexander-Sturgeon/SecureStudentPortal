@@ -1,11 +1,14 @@
 import {Response} from 'express';
 import {AuthRequest} from '../middleware/auth';
 import { classBelongsToTeacher, createLecture } from '../models/lectures';
+import {writeLog, LogEvent, Severity} from '../models/logs';
+
 
 export const addLecture = async function(req: AuthRequest, res: Response){
     //reads teacherId from req.user. This is set after verifiying the token is the valid, current token, by requireAuth, and is seperate form the request body. 
     const teacherId = req.user?.teacher_id ?? null;
     const classId = typeof req.params.classId === "string" ? req.params.classId: null;
+    const ip = req.ip ?? null; 
 
     //if either teacherId or classId are not valid, meaning the teacherId either wasn't sent or was sent through the req body or classId somehow results in undefined, returns a failure status 400.
     if(!teacherId || !classId){
@@ -27,6 +30,9 @@ export const addLecture = async function(req: AuthRequest, res: Response){
         const owns = await classBelongsToTeacher(classId, teacherId);
         
         if(!owns){
+            //logs denied teacher access 
+            await writeLog(`${LogEvent.ACCESS_DENIED} class=${classId}`, Severity.WARNING, "FAILURE", ip, req.user?.user_id ?? null);
+
             res.status(403).json({success: false, message: "forbidden"});
             return;
         }
@@ -36,6 +42,9 @@ export const addLecture = async function(req: AuthRequest, res: Response){
 
         //Creates lecture based on collected data and returns the id of the lecture that was created. 
         const lectureId = await createLecture(classId, content, today, null);
+
+        //logs successful lecture creation
+        await writeLog(`${LogEvent.LECTURE_CREATED} class=${classId} lecture=${lectureId}`, Severity.INFO, "SUCCESS", ip, req.user?.user_id ?? null);
 
         res.status(201).json({success: true, lecture_id: lectureId});
     }catch(error){

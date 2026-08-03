@@ -26,7 +26,7 @@ export const getClasses = async function(req: AuthRequest, res: Response){
 
         res.status(200).json({ success: true, classes });
     }catch(error){
-        console.log("You have encountered an error: ", error);
+        console.error("You have encountered an error: ", error);
         res.status(500).json({success: false, message: "Server error."});
     }
 }
@@ -99,7 +99,7 @@ export const getClassDetail = async function(req: AuthRequest, res: Response){
             lectures
         });
     }catch(error){
-        console.log("You have encountered an error: ", error);
+        console.error("You have encountered an error: ", error);
         res.status(500).json({success: false, message: "Server error."});
         return;
     }
