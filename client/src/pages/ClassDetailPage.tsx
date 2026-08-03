@@ -3,21 +3,14 @@ import { useState, useEffect } from "react";
 import '../styles/ClassDetailPage.css';
 
 import { GetClassDetail } from "../services/classes";
-import type { ClassDetail, Assignment } from "../services/classes";
+import type { ClassDetail, Assignment, Lecture } from "../services/classes";
 import { SubmitAssignment } from "../services/submissions";
 
 import AddLectureComp from "../components/AddLectureComp";
 import AddAssignmentComp from "../components/AddAssignmentComp";
 import AddStudentComp from "../components/AddStudentComp";
 
-interface Lecture {
-      Id: number;
-      Date: string;
-      Title: string;
-      Status: number;
-      Subject: string;
-      Content: string;    
-  }
+
 export default function ClassDetailPage(){
     const {id} = useParams();
     const [classDetail, setClassDetail] = useState<ClassDetail | null>(null);
@@ -25,6 +18,7 @@ export default function ClassDetailPage(){
     const [status, setStatus] = useState(0);
     const [loading, setLoading] = useState(true);
     const [uploadMessage, setUploadMessage] = useState("");
+    const [lectures, setLectures] = useState<Lecture[]>([]);
 
     const canEdit = classDetail?.can_edit ?? false;
 
@@ -44,6 +38,7 @@ export default function ClassDetailPage(){
                 setStatus(result.status);
                 setClassDetail(result.data);
                 setAssignments(result.assignments);
+                setLectures(result.lectures);
             })
             .catch(() => setStatus(0))
             .finally(() => setLoading(false));
@@ -151,21 +146,17 @@ export default function ClassDetailPage(){
                         <div className="detail-lecture">
                             <h3 className="lecture-header">Lectures</h3>
                             <div className="lecture-list">
-                                {/* MAP OVER LECTURES AND MAKE ONE OF THESE DIVS FOR EACH */}
-                                <button className="lecture-card" onClick={() => lectureDisplay({
-                                                                                    Id: 1,
-                                                                                    Date: "Sep 29 2026",
-                                                                                    Title: "Coding 101",
-                                                                                    Status: 1,
-                                                                                    Subject: "OOP",
-                                                                                    Content: "Object oriented Programming is some of the best programming"
-                                                                                })}>
+                                {/* map loops over lectures array and returns one button per item.*/}
+                                {lectures.length === 0 && <p className="lecture-empty">No lectures yet.</p>}
+                                {lectures.map(lecture => <button key={lecture.lecture_id} className="lecture-card" onClick={()=>lectureDisplay(lecture)}>
                                     <div className="lecture-card-info">
-                                        <p className="lecture-date">Sep 29</p>
-                                        <h4 className="detail-item-header">Coding 101</h4>
-                                        <p className="lecture-subject">Subject of this lecture</p>
+                                        <p className="lecture-date">{ new Date(lecture.date).toLocaleDateString("en-CA")}</p>
+                                        <h4 className="detail-item-header">
+                                            {lecture.content.slice(0,40)}
+                                        </h4>
                                     </div>
-                                </button>
+                                </button>)}
+
                                 {canEdit && 
                                     <div className="lecture-create">
                                         <button className="add-lecture-popup-btn" onClick={() => setIsAddLectureComp(!isAddLectureComp)}>Add Lecture</button>
@@ -180,7 +171,7 @@ export default function ClassDetailPage(){
                     {lectureToggle && 
                         <div className="detail-lecture-output">
                             <h2 className="lecture-output-heading">Lecture:</h2>
-                            <p className="lecture-output">{lectureOutput?.Content}</p>
+                            <p className="lecture-output">{lectureOutput?.content}</p>
                         </div>
                     }
                     {isAddLectureComp && <AddLectureComp classId={id ?? ""} onClose={() => setIsAddLectureComp(false)}/>}

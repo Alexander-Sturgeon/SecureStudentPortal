@@ -9,6 +9,13 @@ export interface ClassDetail extends RowDataPacket{
     can_edit: number;
 }
 
+export interface LectureRow extends RowDataPacket{
+    lecture_id: number;
+    date: Date;
+    duration_hours: number | null;
+    content: string;
+}
+
 //Returns the class ONLY if the caller is enrolled in it or teaches it.
 //Anyone else gets null, which the controller turns into a 404.
 export const findClassForUser = async(classId: string, studentId: number | null, teacherId: number | null) => {
@@ -90,3 +97,15 @@ export const findAssignmentsForClass = async(classId: string, studentId: number 
     `, [studentId, classId]);
     return rows;
 }
+
+//class access is checked by findClassForUser before this runs, so it doesn't need to be rechecked. Returns all rows for the lectures for the given class. 
+export const findLectureForClass = async(classId: string) => {
+    const [rows] = await pool.query<LectureRow[]>(`
+        SELECT lecture_id, date, duration_hours, content
+        FROM lecture
+        WHERE class_class_id = ?
+        ORDER BY date
+        `, [classId]);
+        return rows;
+}
+

@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
-import { findClassForUser, findAssignmentsForClass, findClassesForUser } from '../models/classes';
+import { findClassForUser, findAssignmentsForClass, findClassesForUser, findLectureForClass } from '../models/classes';
 
 //A due date counts until the end of that day
 const EndOfDay = function(date: Date){
@@ -75,6 +75,18 @@ export const getClassDetail = async function(req: AuthRequest, res: Response){
             };
         });
 
+
+        //placed here so that findClassForUser runs before grabbing the lectures. 
+        const lectureRows = await findLectureForClass(classId);
+
+        const lectures = lectureRows.map(row => ({
+            lecture_id: row.lecture_id, 
+            date: row.date,
+            duration_hours: row.duration_hours,
+            content: row.content
+        }));
+
+
         res.status(200).json({
             success: true,
             class: {
@@ -83,7 +95,8 @@ export const getClassDetail = async function(req: AuthRequest, res: Response){
                 teacher_name: `${detail.first_name} ${detail.last_name}`,
                 can_edit: detail.can_edit === 1
             },
-            assignments
+            assignments,
+            lectures
         });
     }catch(error){
         console.log("You have encountered an error: ", error);

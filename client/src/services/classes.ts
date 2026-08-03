@@ -15,12 +15,20 @@ export interface Assignment {
     can_submit: boolean;
 }
 
+export interface Lecture{
+    lecture_id: number;
+    date: string; 
+    duration_hours: number | null;
+    content: string;
+}
+
 // The status is returned instead of thrown so the page can tell the
 // difference between "log in again" (401) and "no such class" (404).
 export interface ClassDetailResult {
     status: number;
     data: ClassDetail | null;
     assignments: Assignment[];
+    lectures: Lecture[];
 }
 
 export interface ClassListItem {
@@ -52,9 +60,9 @@ export const GetClassDetail = async (classId: string): Promise<ClassDetailResult
     });
 
     if(!response.ok){
-        return { status: response.status, data: null, assignments: [] };
+        return { status: response.status, data: null, assignments: [], lectures: [] };
     }
 
     const body = await response.json();
-    return { status: response.status, data: body.class, assignments: body.assignments ?? [] };
+    return { status: response.status, data: body.class, assignments: body.assignments ?? [], lectures: body.lectures ?? [] };
 }
