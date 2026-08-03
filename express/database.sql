@@ -147,10 +147,10 @@ ENGINE = InnoDB;
 -- Table `studentportal`.`lecture`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `studentportal`.`lecture` (
-  `lecture_id` INT NOT NULL,
+  `lecture_id` INT NOT NULL AUTO_INCREMENT,
   `date` DATE NULL,
   `duration_hours` INT NULL,
-  `content` VARCHAR(250) NULL,
+  `content` TEXT NULL,
   `class_class_id` VARCHAR(250) NOT NULL,
   PRIMARY KEY (`lecture_id`),
   INDEX `fk_lecture_class1_idx` (`class_class_id` ASC) VISIBLE,
@@ -163,17 +163,19 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `studentportal`.`Failure Logs`
+-- Table `studentportal`.`Security Logs`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `studentportal`.`Failure Logs` (
-  `log_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `studentportal`.`Security_Logs` (
+  `log_id` INT NOT NULL AUTO_INCREMENT,
   `action` VARCHAR(255) NULL,
-  `timestamp` TIMESTAMP(6) NULL,
+  `timestamp` TIMESTAMP(6) NULL DEFAULT CURRENT_TIMESTAMP(6),
   `ip_address` VARCHAR(255) NULL,
-  `user_user_id` INT NOT NULL,
+  `severity` VARCHAR(255) NULL,
+  `outcome` VARCHAR (255) NULL,
+  `user_user_id` INT,
   PRIMARY KEY (`log_id`),
-  INDEX `fk_Failure Logs_user1_idx` (`user_user_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Failure Logs_user1`
+  INDEX `fk_Security_Logs_user1_idx` (`user_user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Security_Logs_user1`
     FOREIGN KEY (`user_user_id`)
     REFERENCES `studentportal`.`user` (`user_id`)
     ON DELETE NO ACTION

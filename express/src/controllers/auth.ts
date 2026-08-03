@@ -3,6 +3,17 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import {findByEmail} from '../models/users';
 
+export const logout = function(req: Request, res: Response){
+
+    //Essentially clears the cookie by sending a new cookie containing the current session's cookie name, path, domain, secure, and samesite details back to the browser but with a date set in the past. This causes the their current session cookie to expire, meaning it is no longer valid. 
+    res.clearCookie("token", {
+        httpOnly: true, 
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict"
+    });
+    res.status(200).json({success: true, message: "Logged Out User Successfully."})
+}
+
 export const login = async function(req: Request, res: Response){
     const {email, password} = req.body
     try{
