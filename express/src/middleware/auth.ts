@@ -37,3 +37,12 @@ export const requireAuth = function(req:AuthRequest, res:Response, next: NextFun
     }
     
 }
+
+//middleware function that checks the authorization of the user; makes sure that user is a teacher before continuing to the classBelongsToTeacher model function. 
+export const requireTeacher = function(req: AuthRequest, res: Response, next: NextFunction){
+    if(req.user?.role !== "teacher"){
+        res.status(403).json({success: false, message: "Forbidden."});
+        return;
+    }
+    next();
+}
